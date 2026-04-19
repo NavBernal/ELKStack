@@ -1,4 +1,4 @@
 I built a fully functional SOC lab from scratch using the ELK Stack, Sysmon, and Mythic C2, configuring endpoints to forward logs, creating detection rules and dashboards, and simulating real-world attacks like brute force activity. By generating and investigating my own attack data, I gained hands-on experience with log ingestion, threat detection, alert tuning, and incident response workflows. This project strengthened both my technical understanding of security operations and my ability to document and present complex findings in a clear format.
 # Creating a Logical Diagram
-Using draw.io, the following diagram was created to represent this lab in a clear and easy format:
+Using draw.io, I created the following diagram to clearly and effectively illustrate the lab environment:
 ![](attachments/Pasted%20image%2020260418222119.png)
