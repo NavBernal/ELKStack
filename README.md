@@ -270,6 +270,8 @@ sudo ./kibana-verification-code
 - Copy this verification code and **paste it in the Kibana web GUI**
 ![](attachments/Pasted%20image%2020260421231744.png)
 #### Sign In Using Generated Credentials
-- **Username:** Kibana
+- **Username:** elastic
 - **Password:** This will come from the previous **Security autoconfiguration information**
-![](attachments/Pasted%20image%2020260421231924.png)
+![](attachments/Pasted%20image%2020260421232028.png)
+
+#### We've now accessed our Kibana GUI!
