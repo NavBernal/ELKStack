@@ -255,7 +255,7 @@ sudo systemctl status kibana.service
 
 #### Access Web GUI
 - Using your host machine, open a browser and go to `127.0.0.1:5602`
-![720](attachments/Pasted%20image%2020260421231612.png)
+![510](attachments/Pasted%20image%2020260421231612.png)
 #### Generate Welcome Token (ELK-VM)
 ```
 cd /usr/share/elasticsearch/bin
@@ -268,11 +268,11 @@ cd /usr/share/kibana/bin
 sudo ./kibana-verification-code
 ```
 - Copy this verification code and **paste it in the Kibana web GUI**
-![](attachments/Pasted%20image%2020260421231744.png)
+![553](attachments/Pasted%20image%2020260421231744.png)
 #### Sign In Using Generated Credentials
 - **Username:** elastic
 - **Password:** This will come from the previous **Security autoconfiguration information**
-![](attachments/Pasted%20image%2020260421232028.png)
+![508](attachments/Pasted%20image%2020260421232028.png)
 
 #### We've now accessed our Kibana GUI!
 ![](attachments/Pasted%20image%2020260421232124.png)
