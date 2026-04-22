@@ -41,6 +41,8 @@ The **ELK Stack** is a powerful combination of tools used for centralized loggin
 - **Visualization**: Gain insights quickly through dashboards
 - **Scalability**: Designed to handle growth in data and infrastructure
 - **Ecosystem**: Strong community support and extensive integrations
+
+---
 ## Elasticsearch Setup
 
 ### 1. Download Ubuntu Server
@@ -108,7 +110,7 @@ sudo systemctl start ssh
 ```
 
 #### Configure Port Forwarding (VirtualBox)
-1. Go to **Network Manager → NAT Networks**
+1. Go to **Tools → Netowrk → NAT Networks**
 2. Click **Port Forwarding**
 3. Add rule:
    - **Name:** SSH
@@ -147,10 +149,127 @@ wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-9.3.3-am
 
 #### Install Package
 ```bash
-ls
 sudo dpkg -i elasticsearch-9.3.3-amd64.deb
 ```
 
 #### Important
-- Save the **Security autoconfiguration information**
+- Save the [[Security autoconfiguration information]]
   - Contains auto-generated credentials
+
+---
+
+### 7. Configuring Elasticsearch
+
+#### Modify the Elasticsearch YAML file
+```bash
+sudo nano /etc/elasticsearch/elasticsearch.yml
+```
+1. Change `network.host` to **172.31.0.4**
+2. Uncomment the `http.port` variable, keep port **9200**
+3. Save these changes by pressing **Ctrl+X → Y → Enter**
+
+---
+
+### 8. Start Elasticsearch
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable elasticsearch.service
+sudo systemctl start elasticsearch.service
+sudo systemctl status elasticsearch.service
+```
+
+---
+
+## Kibana Setup
+
+### 1. Download Kibana
+- Copy `.deb` link from:  
+  [https://www.elastic.co/downloads/elasticsearch](https://www.elastic.co/downloads/kibana)
+
+```bash
+wget https://artifacts.elastic.co/downloads/kibana/kibana-9.3.3-amd64.deb
+```
+
+#### Install Package
+```bash
+sudo dpkg -i kibana-9.3.3-amd64.deb
+```
+
+---
+
+### 2. Configure Kibana
+#### Modify the Kibana YAML file
+```bash
+sudo nano /etc/kibana/kibana.yml
+```
+1. Uncomment the `server.port` variable, keep port **5601**
+2. Uncomment and change `server.host` to **172.31.0.4**
+3. Uncomment and change `server.publicBaseUrl` to http://172.31.0.4:5601
+4. Save these changes by pressing **Ctrl+X → Y → Enter**
+
+---
+
+### 3. Create encryption keys for alerting
+
+#### Change directory
+```bash
+cd /usr/share/kibana/bin
+```
+#### Generate encryption keys
+```bash
+sudo ./kibana-encryption-keys generate
+```
+- Make sure to **save these encryption keys**
+
+#### Add keys to keystore
+```bash
+sudo ./kibana-keystore add xpack.encryptedSavedObjects.encryptionKey
+sudo ./kibana-keystore add xpack.reporting.encryptionKey
+sudo ./kibana-keystore add xpack.security.encryptionKey
+```
+
+---
+
+### 4. Start Kibana
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable kibana.service
+sudo systemctl start kibana.service
+sudo systemctl status kibana.service
+```
+![](attachments/Pasted%20image%2020260421224127.png)
+
+---
+
+### 5. Access Kibana
+
+#### Configure Port Forwarding (VirtualBox)
+1. Go to **Tools → Netowrk → NAT Networks**
+2. Click **Port Forwarding**
+3. Add rule:
+   - **Name:** Web GUI (ELK)
+   - **Host IP:** 127.0.0.1
+   - **Host Port:** 5602
+   - **Guest IP:** 172.31.0.4
+   - **Guest Port:** 5601
+
+#### Access Web GUI
+- Using your host machine, open a browser and go to `127.0.0.1:5602`
+![720](attachments/Pasted%20image%2020260421231612.png)
+#### Generate Welcome Token (ELK-VM)
+```
+cd /usr/share/elasticsearch/bin
+sudo ./elasticsearch-create-enrollment-token --scope kibana
+```
+- Copy this enrollment token and **paste it in the Kibana web GUI**
+#### Generate Kibana Verification Code
+```bash
+cd /usr/share/kibana/bin
+sudo ./kibana-verification-code
+```
+- Copy this verification code and **paste it in the Kibana web GUI**
+![](attachments/Pasted%20image%2020260421231744.png)
+#### Sign In Using Generated Credentials
+- **Username:** Kibana
+- **Password:** This will come from the previous **Security autoconfiguration information**
+![](attachments/Pasted%20image%2020260421231924.png)
