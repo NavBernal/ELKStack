@@ -275,3 +275,4 @@ sudo ./kibana-verification-code
 ![](attachments/Pasted%20image%2020260421232028.png)
 
 #### We've now accessed our Kibana GUI!
+![](attachments/Pasted%20image%2020260421232124.png)
