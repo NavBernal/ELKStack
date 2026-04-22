@@ -43,7 +43,7 @@ The **ELK Stack** is a powerful combination of tools used for centralized loggin
 - **Ecosystem**: Strong community support and extensive integrations
 ## Elasticsearch Setup
 
-#### 1. Download Ubuntu Server
+### 1. Download Ubuntu Server
 - Download [Ubuntu Server 24.04 LTS](https://ubuntu.com/download/server )
 - This will be used inside VirtualBox
 
