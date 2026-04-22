@@ -4,15 +4,15 @@ Using draw.io, I created the following diagram to clearly and effectively illust
 
 ![](attachments/Pasted%20image%2020260418222119.png)
 
-### ELK Stack Introduction
+## ELK Stack Introduction
 
 The **ELK Stack** is a powerful combination of tools used for centralized logging, analysis, and visualization of security data.
-#### **Elasticsearch (E): Data Storage & Search**
+### **Elasticsearch (E): Data Storage & Search**
 - A high-performance database for storing logs (Windows events, syslogs, firewall logs, etc.)
 - Enables fast, flexible searching across large datasets
 - Uses **ESQL** for querying data
 - Supports RESTful APIs and JSON, making it easy to integrate with other tools and automate data retrieval
-#### **Logstash (L): Data Collection & Processing**
+### **Logstash (L): Data Collection & Processing**
 - Acts as a pipeline to collect and process telemetry from multiple sources
 - Normalizes and forwards data into Elasticsearch
 - Supports log collection via:
@@ -25,7 +25,7 @@ The **ELK Stack** is a powerful combination of tools used for centralized loggin
         - Heartbeat: Uptime monitoring
     - **Elastic Agent**: A unified agent that collects multiple data types from a single host
 - Allows filtering and transformation of logs for highly customized ingestion
-#### **Kibana (K): Visualization & Analysis**
+### **Kibana (K): Visualization & Analysis**
 - A web-based interface for interacting with Elasticsearch data
 - Key features include:
     - **Discover**: Query and explore logs using ESQL
