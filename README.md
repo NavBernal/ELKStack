@@ -101,7 +101,7 @@ The **ELK Stack** is a powerful combination of tools used for centralized loggin
 ```bash
 ip a
 ```
-- Example: `172.31.0.4`
+- **My IP:** `172.31.0.4`
 
 #### Enable SSH
 ```bash
@@ -132,7 +132,7 @@ ssh <username>@127.0.0.1 -p 2222
 
 #### Update System
 ```bash
-sudo apt update && sudo apt upgrade
+sudo apt update && sudo apt upgrade -y
 ```
 
 #### Take Snapshot (Recommended)
@@ -276,3 +276,93 @@ sudo ./kibana-verification-code
 
 #### We've now accessed our Kibana GUI!
 ![](attachments/Pasted%20image%2020260421232124.png)
+
+---
+
+## Fleet Server Setup
+### 1. Create VM
+1. Go to: **Machine → New**
+2. Configure:
+   - **Name:** `Fleet-Server`
+   - **ISO Image:** Ubuntu Server ISO
+   - Enable: **Skip Unattended Installation**
+3. Hardware:
+   - **Memory:** 4096 MB
+   - **CPU:** 1 processor
+1. Storage:
+   - **Disk Size:** 25 GB
+1. After creation:
+   - Right-click **ELK-VM → Settings**
+   - Go to **Network**
+   - Set:
+     - **Attached to:** NAT Network
+     - **Network Name:** `ELK-SOC-Lab`
+   - Click **OK**
+
+---
+
+### 2. Setting up VM
+- Installing Ubuntu Server is exactly the same as listed before
+
+#### Get VM IP
+```bash
+ip a
+```
+- **My IP:** `172.31.0.6`
+
+#### Enable SSH
+```bash
+sudo systemctl enable ssh
+sudo systemctl start ssh
+```
+
+#### Configure Port Forwarding (VirtualBox)
+1. Go to **Tools → Netowrk → NAT Networks**
+2. Click **Port Forwarding**
+3. Add rule:
+   - **Name:** SSH
+   - **Host IP:** 127.0.0.1
+   - **Host Port:** 2223
+   - **Guest IP:** 172.31.0.6
+   - **Guest Port:** 22
+
+#### Connect via SSH
+```bash
+ssh <username>@127.0.0.1 -p 2223
+```
+- Type `yes` when prompted
+- Enter credentials
+
+#### Update System
+```bash
+sudo apt update && sudo apt upgrade -y
+```
+
+#### Take Snapshot (Recommended)
+- VirtualBox → **Machine → Take Snapshot**
+- **Name:** `Updated-BaseInstall`
+
+---
+
+### 3. Adding Fleet Server to ELK Web GUI
+
+#### Navigate to the Fleet Menu
+![](attachments/Pasted%20image%2020260422213215.png)
+
+#### Add Fleet Server
+1. Click on the **Add Fleet Server** button
+2. **Name:** Fleet-Server
+3. **URL:** `https://172.31.0.6`
+4. Click on **Generate Fleet Server policy**
+5. Once created, the default port will be **443**, however, we want to change this to **8220**
+6. Click on **Continue** then the **Fleet Settings** button
+7. Click on the **Edit** pencil icon
+8. Change the **URL** to `https://172.30.0.6:8220`
+9. Click on **Save and apply settings → Save and deploy**
+10. Once done, click on the **Agents** menu, then **Add Fleet Server**
+11. Under **Fleet Server Hosts**, choose the one we just created, then click **Continue**
+12. Copy the **Linux Tar**
+13. Paste this in the **Fleet-VM** terminal, then click **Enter → Y**
+14. Once done, return to the ELK GUI and we should now see **Fleet Server Connected**
+15. Click on **Continue enrolling Elastic Agent**
+16. Name the policy **Win-Policy**
