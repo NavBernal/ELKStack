@@ -289,9 +289,9 @@ sudo ./kibana-verification-code
 3. Hardware:
    - **Memory:** 4096 MB
    - **CPU:** 1 processor
-1. Storage:
+4. Storage:
    - **Disk Size:** 25 GB
-1. After creation:
+5. After creation:
    - Right-click **ELK-VM → Settings**
    - Go to **Network**
    - Set:
@@ -301,7 +301,7 @@ sudo ./kibana-verification-code
 
 ---
 
-### 2. Setting up VM
+### 2. Set up VM
 - Installing Ubuntu Server is exactly the same as listed before
 
 #### Get VM IP
@@ -344,7 +344,7 @@ sudo apt update && sudo apt upgrade -y
 
 ---
 
-### 3. Adding Fleet Server to ELK Web GUI
+### 3. Add Fleet Server to ELK Web GUI
 
 #### Navigate to the Fleet Menu
 ![](attachments/Pasted%20image%2020260422213215.png)
@@ -366,3 +366,83 @@ sudo apt update && sudo apt upgrade -y
 14. Once done, return to the ELK GUI and we should now see **Fleet Server Connected**
 15. Click on **Continue enrolling Elastic Agent**
 16. Name the policy **Win-Policy**
+17. Click on **Create policy**
+18. Choose the **Windows x86_64** option then copy this, as we'll be pasting this into our Windows Server VM
+
+---
+
+## Windows Server Setup
+### 1. Download Windows Server
+- Download [Windows Server 2022]([https://ubuntu.com/download/server ](https://www.microsoft.com/en-us/evalcenter/download-windows-server-2022))
+- This will be used inside VirtualBox
+
+---
+### 2. Create VM
+1. Go to: **Machine → New**
+2. Configure:
+   - **Name:** `Windows-Server-VM`
+   - **ISO Image:** `SERVER_EVAL_x64FRE_en-us.iso`
+   - Enable: **Skip Unattended Installation**
+3. Hardware:
+   - **Memory:** 4096 MB
+   - **CPU:** 1 processor
+4. Storage:
+   - **Disk Size:** 50 GB
+5. After creation:
+   - Right-click **ELK-VM → Settings**
+   - Go to **Network**
+   - Set:
+     - **Attached to:** NAT Network
+     - **Network Name:** `ELK-SOC-Lab`
+   - Click **OK**
+
+---
+
+### 3. Install Windows Server
+1. Start the VM
+2. Proceed through installer:
+   - Press **Next → Install** 
+   - Choose **Windows Server 2022 Standard Evaluation (Desktop Experience) → Next**
+   - Press **Accept the terms → Next**
+   - Choose **Custom → Default Drive → Next**
+   - Once the server has been installed, choose a password and click **Finish**
+#### Take Snapshot (Recommended)
+- VirtualBox → **Machine → Take Snapshot**
+- **Name:** `BaseInstall`
+
+---
+
+### 4. Set up Sysmon
+1. To get past the lock screen, click on **Input → Keyboard → Insert Ctrl-Alt-Del**
+2. Once on the homescreen, open up **Microsoft Edge**
+3. Search for **sysmon** and click on [Sysmon - Sysinternals | Microsoft Learn](https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon)
+4. Click on [Download Sysmon](https://download.sysinternals.com/files/Sysmon.zip)
+5. Also search for **olaf sysmon config** and click on the [sysmon-modular](https://github.com/olafhartong/sysmon-modular) GitHub repo
+6. Scroll down and click on **sysmonconfig.xml**
+7. From there, click on **Download raw file**
+8. In the Downloads directory, right-click **Sysmon.zip → Extract all**
+9. Within the extracted Sysmon folder, open PowerShell by holding **Shift+Right-click → Open PowerShell window here**
+10. Type in `.\Sysmon64.exe -i ..\sysmonconfig.xml`
+11. Agree to the license terms, and Sysmon should now be installed
+
+---
+
+### 5. Add Elastic Agent
+
+#### Enable Copy & Paste to VM
+1. Go to: **Devices → Insert Guest Additions CD image...**
+2. Open up **File Explorer → This PC** and look for the **VirtualBox Guest Additions** CD drive
+3. Double-click it, and open **VBoxWindowsAdditions**
+4. Run through the installer then click **Reboot now**
+5. Once rebooted, go to:  **Devices → Shared Clipboard → Bidirectional**
+
+If you're on **Linux**, you may have to manually download the **VBoxGuestAdditions** ISO file from the official [VirtualBox download site](https://download.virtualbox.org/virtualbox)
+1. Once downloaded, from the running Windows Server VM go to: **Devices → Optical Drivers → Choose a disk file** and choose the guest additions file
+2. Once done, follow the steps listed above
+
+#### Installing Elastic Agent
+1. Open up **PowerShell** and paste the **Win-Policy** install command we got when setting up our fleet server
+2. At the end of the command, add `--insecure` then click **Enter → y**
+	- Without adding this to the end, the installation will fail as we're using a self-signed certificate
+3. In our ELK Web GUI, we should now be able to see that the agent was successfully enrolled:
+![](attachments/Pasted%20image%2020260424123727.png)
