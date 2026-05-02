@@ -2,7 +2,7 @@ I built a fully functional, on-prem SOC lab from scratch using the ELK Stack, Sy
 ## Creating a Logical Diagram
 Using draw.io, I created the following diagram to clearly and effectively illustrate the lab environment:
 
-![](attachments/Pasted%20image%2020260502162449.png)
+![](attachments/Pasted%20image%2020260502162629.png)
 
 ## ELK Stack Introduction
 
