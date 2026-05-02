@@ -467,7 +467,7 @@ If you're on **Linux**, you may have to manually download the **VBoxGuestAdditio
 6. Scroll down and choose the **Linux x86_64** option then copy this
 
 ### Installing Elastic Agent
-1. SSH into each Ubuntu VM and paste the **Linux-Policy** install command
+1. SSH into our **Ubuntu-VM** and paste the **Linux-Policy** install command
 2. At the end of the command, add `--insecure` then click **Enter → y**
 3. In our ELK Web GUI, we should now be able to see that the agent was successfully enrolled:
 ![](attachments/Pasted%20image%2020260424145859.png)
