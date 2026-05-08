@@ -914,3 +914,108 @@ osTicket is a free, open-source support ticket system which we will use to track
 3. We should now see our **Testing API** ticket:
 ![](attachments/Pasted%20image%2020260502160519.png)
 4. This confirms our integration between osTicket and Elastic!
+
+---
+
+## Generating Telemetry
+Being that this lab is not exposed to the internet, this begs the question: how can we generate SSH & RDP brute force alerts? By using Kali Linux of course!
+### 1. Downloading Kali Linux
+- Download the VirtualBox version from https://www.kali.org/get-kali/
+- Unzip this folder
+
+---
+
+### 2. Add Kali VM
+1. Go to: **Machine → Add**
+2. Add the **kali-linux-2026.1-virtualbox-amd64.vdi** file
+3. Leave everything at their default settings
+	- The default credentials will be **kali/kali**
+4. After creation:
+   - Right-click **ELK-VM → Settings**
+   - Go to **Network**
+   - Set:
+     - **Attached to:** NAT Network
+     - **Network Name:** `ELK-SOC-Lab`
+   - Click **OK**
+#### Update System
+```bash
+sudo apt update && sudo apt upgrade -y
+```
+
+#### Take Snapshot (Recommended)
+- VirtualBox → **Machine → Take Snapshot**
+- **Name:** `Updated-BaseInstall`
+
+---
+
+### 3. Generating SSH Telemetry
+1. Open up the **terminal** and navigate to the following directory:
+```bash
+cd /usr/share/wordlists
+```
+2. Unzip the **rockyou.txt.gz** wordlist:
+```bash
+sudo gunzip rockyou.txt.gz
+```
+3. Start up **Metasploit**:
+```bash
+msfconsole
+```
+4. Utilize an **SSH login auxiliary**:
+```bash
+use auxiliary/scanner/ssh/ssh_login
+```
+5. We want to modify the following options:
+	- **RHOSTS:** The target host(s)
+	- **PASS_FILE:** FIle containing passwords
+	- **USERNAME:** A specific username to authenticate as
+6. Since we'll be attacking our SSH server, these are the parameters I'll set:
+```bash
+set rhosts 172.31.0.9
+set pass_file /usr/share/wordlists/rockyou.txt
+set username root
+```
+7. To begin this attack, we will simply enter `run`
+
+---
+
+### 4. Confirming The Attack
+1. Return to the ELK Web GUI, and navigate to the **Discover** tab
+2. We can now filter for all failed SSH authentication attempts using the following query: `system.auth.ssh.event equals failed`:
+![](attachments/Pasted%20image%2020260505001404.png)
+
+---
+
+## Creating Alerts & Dashboards
+### Creating an Alert for Failed SSH Attempts
+1. Navigate to the **Discover** tab
+2. Using the **Available fields** on the left side, add the following fields as columns:
+	- `system.auth.ssh.event`
+		- Filter for **failed**
+		 ![](attachments/Pasted%20image%2020260508113640.png)
+	- `user.name`
+	- `source.ip`
+3. We should now see something like this:
+![](attachments/Pasted%20image%2020260508113841.png)
+4. We must now save this search by clicking on the **Save** button in the top-right corner
+5. Let's name this **Failed SSH Attempts** then click **Save**
+![](attachments/Pasted%20image%2020260508114005.png)
+6. To create an alert, we can now click on the **Alerts** button on the top-right of the screen, then click **Create search threshold rule**
+![](attachments/Pasted%20image%2020260508114117.png)
+7. On the **Create rule** page, let's set the following parameters:
+	- **IS ABOVE:** 5
+		- This will allow this rule to check for failed SSH attempts in the last 5 minutes
+	![](attachments/Pasted%20image%2020260508114502.png)
+8. Once done, let's click **Next** until we get to where we set our **Rule name**, which I will set as **Failed SSH Attempts**
+9. Once done, click on **Create rule**
+
+---
+
+### Creating a Dashboard for Failed SSH Attempts
+1. Click on the hamburger menu icon on the top-left and navigate to **Maps**
+![](attachments/Pasted%20image%2020260508114757.png)
+2. Once on the **Maps** page, let's enter the following query: `system.auth.ssh.event: Failed`
+3. Once done, let's click on the **Add layer** button and use the **Choropleth** option
+4. Let's set our **EMS boundaries** option as **World Countries**
+5. For the **Data view** option, let's set this as `logs-*`
+6. 
