@@ -1050,3 +1050,5 @@ set username root
 	- Link: {{rule.url}}
 23. Once done, click on **Create & enable rule**
 #### Validate in osTicket
+**WORK IN PROGRESS**
+- osTicket is acting strangel
