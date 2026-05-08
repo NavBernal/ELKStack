@@ -1,7 +1,7 @@
 I built a fully functional, on-prem SOC lab from scratch using the ELK Stack, Sysmon, and Mythic C2, configuring endpoints to forward logs, creating detection rules and dashboards, and simulating real-world attacks like brute force activity. By generating and investigating my own attack data, I gained hands-on experience with log ingestion, threat detection, alert tuning, and incident response workflows. This project strengthened both my technical understanding of security operations and my ability to document and present complex findings in a clear format.
+![](attachments/Pasted%20image%2020260502162629.png)
 
 ## Table of Contents
-- [Creating a Logical Diagram](#logical-diagram)
 - [ELK Stack Introduction](#elk-stack-introduction)
 - [Elasticsearch Setup](#elasticsearch-setup)
 - [Kibana Setup](#kibana-setup)
@@ -13,12 +13,6 @@ I built a fully functional, on-prem SOC lab from scratch using the ELK Stack, Sy
 - [osTicket Server Setup](#osticket-server-setup)
 - [Generating Telemetry](#generating-telemetry)
 - [Creating Alerts](#creating-alerts)
-
-## Creating a Logical Diagram
-Using draw.io, I created the following diagram to clearly and effectively illustrate the lab environment:
-
-![](attachments/Pasted%20image%2020260502162629.png)
-
 ## ELK Stack Introduction
 
 The **ELK Stack** is a powerful combination of tools used for centralized logging, analysis, and visualization of security data.
