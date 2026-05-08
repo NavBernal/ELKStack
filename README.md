@@ -986,7 +986,7 @@ set username root
 
 ---
 
-## Creating Alerts & Dashboards
+## Creating Alerts
 ### Creating an Alert for Failed SSH Attempts
 1. Navigate to the **Discover** tab
 2. Using the **Available fields** on the left side, add the following fields as columns:
@@ -1011,11 +1011,33 @@ set username root
 
 ---
 
-### Creating a Dashboard for Failed SSH Attempts
-1. Click on the hamburger menu icon on the top-left and navigate to **Maps**
-![](attachments/Pasted%20image%2020260508114757.png)
-2. Once on the **Maps** page, let's enter the following query: `system.auth.ssh.event: Failed`
-3. Once done, let's click on the **Add layer** button and use the **Choropleth** option
-4. Let's set our **EMS boundaries** option as **World Countries**
-5. For the **Data view** option, let's set this as `logs-*`
-6. 
+### Generating a Ticket for Elastic Alerts
+1. Open up the menu icon on the top-left and scroll down until you see **Security** then **Rules**
+![](attachments/Pasted%20image%2020260508120435.png)
+2. Choose **Detection rules (SIEM)**
+3. Click on **Create new rule**
+4. Choose **Threshold**
+5. Scroll down and type in the following for the custom query: `system.auth.ssh.event : "Failed" `
+6. **Group by** `user.name` and `source.ip`
+7. Choose the same for the **Required fields**
+8. Click **Continue** and set the rule name to **Failed SSH Attempts**
+9. Set the **Default severity** to **Medium**
+10. Set the **Description** to "Failed SSH attempts on our SSH server"
+11. Click on **Advanced settings** and set the **Custom highlighted field** to `source.ip`
+12. Scroll down and click **Continue**
+13. Set the **Additional look-back time** to 5 minutes
+14. Click **Continue**
+15. On the **Actions** screen, choose the **Webhook** option
+16. Make sure the **Webhook connector** is set to **osTicket**
+17. For the **Body**, we can paste a test provided by the official [osTicket Github](https://github.com/osTicket/osTicket/blob/develop/setup/doc/api/tickets.md)
+18. Delete the **ip** and **attachments** fields from the body
+19. Set the **name** field to **Elastic**
+20. For the **subject** field, remove the default text and click on the **Add filter** button in the top right corner:
+![](attachments/Pasted%20image%2020260508133529.png)
+21. Search for and choose the `rule.name` variable
+22. We can also add the following fields as well:
+	- User: {{context.alerts.0.user.name}}
+	- Source IP: {{context.alerts.0.source.ip}}
+	- Link: {{rule.url}}
+23. Once done, click on **Create & enable rule**
+#### Validate in osTicket
