@@ -1,4 +1,19 @@
 I built a fully functional, on-prem SOC lab from scratch using the ELK Stack, Sysmon, and Mythic C2, configuring endpoints to forward logs, creating detection rules and dashboards, and simulating real-world attacks like brute force activity. By generating and investigating my own attack data, I gained hands-on experience with log ingestion, threat detection, alert tuning, and incident response workflows. This project strengthened both my technical understanding of security operations and my ability to document and present complex findings in a clear format.
+
+## Table of Contents
+- [Creating a Logical Diagram](#logical-diagram)
+- [ELK Stack Introduction](#elk-stack-introduction)
+- [Elasticsearch Setup](#elasticsearch-setup)
+- [Kibana Setup](#kibana-setup)
+- [Fleet Server Setup](#fleet-server-setup)
+- [Windows Server Setup](#windows-server-setup)
+- [Elastic Agent Setup](#elastic-agent-setup)
+- [Push Sysmon & Defender Data](#push-sysmon--defender-data)
+- [Mythic C2 Server Setup](#mythic-c2-server-setup)
+- [osTicket Server Setup](#osticket-server-setup)
+- [Generating Telemetry](#generating-telemetry)
+- [Creating Alerts](#creating-alerts)
+
 ## Creating a Logical Diagram
 Using draw.io, I created the following diagram to clearly and effectively illustrate the lab environment:
 
